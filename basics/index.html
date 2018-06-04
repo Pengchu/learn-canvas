@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Title Page</title>
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
+
+		html,
+		body {
+			width: 100%;
+			height: 100%;
+		}
+
+		body {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		body {
+			background-color: #dddddd;
+		}
+
+		canvas {
+			/*			box-shadow: 5px 5px 10px rgba(0, 0, 0, .5);*/
+			background-color: #ffffff;
+		}
+
+		.r-box {
+			width: 375px;
+			height: 500px;
+			padding: 10px 15px;
+			background-color: #ffffff;
+		}
+	</style>
+
+</head>
+
+<body>
+
+	<div class="container">
+		<!-- Canvas
+		============================================================ -->
+		<canvas id="canvas" class="pull-left" width="750" height="500">
+			您的浏览器不支持Canvas，请升级或使用其他浏览器浏览
+		</canvas>
+
+		<!--
+		============================================================ -->
+		<aside class="r-box pull-right">
+			<ul class="list-group">
+				<li class="list-group-item">坐标：<span id="coordinate">0, 0</span></li>
+			</ul>
+		</aside>
+	</div>
+
+
+	<script>
+		var canvas = document.getElementById('canvas'),
+			context = canvas.getContext('2d'),
+			coordinate = document.getElementById('coordinate'),
+			drawingSurfaceImageData,
+			dragging = false,
+			color = 'orange';
+
+		var rect = {
+			x: 0,
+			y: 0,
+			width: 0,
+			height: 0
+		};
+
+
+		// 函数
+		// -------------------------------------------------------------------
+
+		// 将window屏幕坐标转化为canvas坐标
+		function windowTocanvas(canvas, x, y) {
+
+			var bbox = canvas.getBoundingClientRect();
+			return {
+				x: x - bbox.left * (canvas.width / bbox.width),
+				y: y - bbox.top * (canvas.height / bbox.height)
+			};
+		}
+
+		function saveDrawingSurface() {
+
+			drawingSurfaceImageData = context.getImageData(0, 0, canvas.width, canvas.height);
+		}
+
+		function restoreDrawingSurface() {
+
+			context.putImageData(drawingSurfaceImageData, 0, 0);
+		}
+
+		// 获得随机颜色
+		function randowColor() {
+
+			var r = Math.floor(Math.random()*256),
+				g =	Math.floor(Math.random()*256),
+				b = Math.floor(Math.random()*256);
+			return 'rgba(' + r + ', ' + g + ', ' + b + ', 1)';
+		}
+
+		// 显示网格
+		function drawGrid(context, color, stepx, stepy) {
+
+			// 设置网格线条样式
+			context.strokeStyle = color;
+			context.lineWidth = 0.5;
+
+			for (var i = stepx + 0.5; i < context.canvas.width; i += stepx) {
+
+				context.beginPath();
+				context.moveTo(i, 0);
+				context.lineTo(i, context.canvas.height);
+				context.stroke();
+			}
+
+			for (var i = stepy + 0.5; i < context.canvas.height; i += stepy) {
+
+				context.beginPath();
+				context.moveTo(0, i);
+				context.lineTo(context.canvas.width, i);
+				context.stroke();
+			}
+		}
+
+		// 显示参考线
+		function drawGuidelines(context, color, x, y) {
+
+			context.save();
+			// 设置参考线样式
+			context.strokeStyle = color;
+			context.lineWidth = 0.5;
+
+			// 垂直参考线
+			context.beginPath();
+			context.moveTo(x + 0.5, 0);
+			context.lineTo(x + 0.5, context.canvas.height);
+			context.stroke();
+
+			// 水平参考线
+			context.beginPath();
+			context.moveTo(0, y + 0.5);
+			context.lineTo(context.canvas.width, y + 0.5);
+			context.stroke();
+
+			context.restore();
+		}
+
+		// 显示坐标
+		function updateCoordinate(coordinate, x, y) {
+
+			coordinate.innerHTML = x.toFixed(0) +',' + y.toFixed(0);
+		}
+
+		// 绘制矩形
+		function updateRect(context, color,  x, y) {
+
+			context.beginPath();
+
+			context.strokeStyle = color;
+			context.lineWidth = 1;
+
+			context.strokeRect(rect.x, rect.y, x - rect.x, y - rect.y);
+		}
+
+		// 事件处理程序
+		// -------------------------------------------------------------------
+
+		// 鼠标按下事件
+		canvas.onmousedown = function(e) {
+
+			var loc = windowTocanvas(canvas, e.clientX, e.clientY);
+
+			e.preventDefault();
+			saveDrawingSurface();
+
+			rect.x = loc.x;
+			rect.y = loc.y;
+
+			color = randowColor();
+
+			dragging = true;
+		}
+
+		// 鼠标移动事件
+		canvas.onmousemove = function(e) {
+
+			var loc;
+
+			if (dragging) {
+				loc = windowTocanvas(canvas, e.clientX, e.clientY);
+
+				e.preventDefault();
+				restoreDrawingSurface();
+
+				drawGrid(context, 'lightgray', 10, 10);
+				drawGuidelines(context, 'rgba(0, 0, 230, 0.4)', loc.x, loc.y);
+				updateCoordinate(coordinate, loc.x, loc.y);
+
+				// 显示矩形轮廓
+				updateRect(context, color,loc.x, loc.y);
+			}
+		}
+
+		// 鼠标抬起事件
+		canvas.onmouseup = function(e) {
+
+			var loc = windowTocanvas(canvas, e.clientX, e.clientY);
+
+			restoreDrawingSurface();
+			// 绘制矩形
+			updateRect(context, color, loc.x, loc.y);
+
+			dragging = false;
+
+		}
+
+
+		// 初始化
+		// -------------------------------------------------------------------
+		drawGrid(context, 'lightgray', 10, 10);
+	</script>
+</body>
+
+</html>
