@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>渐变色 Gradient</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <!--  -->
+    <style>
+        html, body { width: 100%; height: 100% }
+        body { display: flex; justify-content: center; align-items: center; }
+        body { background-color: #dddddd; }
+        canvas { background-color: #ffffff; }
+    </style>
+</head>
+
+<body>
+    
+    <!-- Canvas
+    ============================================ -->
+    <canvas id="canvas" width="750" height="500"></canvas>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    
+    <script>
+        
+        var canvas = document.getElementById('canvas'),
+            context = canvas.getContext('2d'),
+            linearGradient = context.createLinearGradient(0, 0, 0, canvas.height),
+            radialGradient = context.createRadialGradient(537.5, canvas.height, 10, 537.5, 0, 100);
+        
+        
+        // 线性渐变
+        
+        linearGradient.addColorStop(0, 'white');
+        linearGradient.addColorStop(1, 'blue');
+        
+        context.fillStyle = linearGradient;
+        context.fillRect(50, 100, 225, 300);
+        
+        // 放射渐变
+        
+        radialGradient.addColorStop(0, 'red');
+        radialGradient.addColorStop(1, 'yellow');
+        
+        context.fillStyle = radialGradient;
+        context.fillRect(425, 100, 225, 300);
+        
+        // 事件
+        //----------------------------------------------------------
+        
+        // 初始化
+        //----------------------------------------------------------
+        
+       
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>线条样式 lineJoin</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <!--  -->
+    <style>
+        html, body { width: 100%; height: 100% }
+        body { display: flex; justify-content: center; align-items: center; }
+        body { background-color: #dddddd; }
+        canvas { background-color: #ffffff; }
+    </style>
+</head>
+
+<body>
+    
+    <!-- Canvas
+    ============================================ -->
+    <canvas id="canvas" width="750" height="500"></canvas>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    
+    <script>
+        
+        var canvas = document.getElementById('canvas'),
+            context = canvas.getContext('2d');
+        
+        // 字体样式
+        context.font = '14px Microsoft Yahei';
+        context.textAlign = 'center';
+        
+        context.lineWidth = 10;
+
+        // 线条边角样式
+        // miter 尖角
+        context.lineJoin = 'miter';
+        
+        context.strokeStyle = 'goldenrod';
+        context.strokeRect(75, 100, 150, 150);
+        context.fillText('lineJoin: miter 尖角', 150, 175);
+        
+        // round 圆角
+        context.lineJoin = 'round';
+        
+        context.strokeStyle = 'blue';
+        context.strokeRect(250, 100, 150, 150);
+        context.fillText('lineJoin: round 圆角', 325, 175);
+        
+        // bevel 圆角
+        context.lineJoin = 'bevel';
+        
+        context.strokeStyle = 'red';
+        context.strokeRect(425, 100, 150, 150);
+        context.fillText('lineJoin: bevel 斜角', 500, 175);
+        
+
+        // 事件
+        //----------------------------------------------------------
+        
+        // 初始化
+        //----------------------------------------------------------
+        
+       
+    </script>
+</body>
+
+</html>
