@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>路径，描边与填充</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <!--  -->
+    <style>
+        html, body { width: 100%; height: 100% }
+        body { display: flex; justify-content: center; align-items: center; }
+        body { background-color: #dddddd; }
+        canvas { background-color: #ffffff; }
+    </style>
+</head>
+
+<body>
+    
+    <!-- Canvas
+    ============================================ -->
+    <canvas id="canvas" width="750" height="500"></canvas>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    
+    <script>
+        
+        var canvas = document.getElementById('canvas'),
+            context = canvas.getContext('2d');
+
+        // 函数
+        //----------------------------------------------------------
+        
+        // 绘制矩形
+        function drawRects() {
+            
+            context.lineWidth = 5;
+            context.beginPath();
+            context.rect(80, 30, 150, 100);
+            context.stroke();
+            
+            context.beginPath();
+            context.rect(310, 30, 150, 100);
+            context.fill();
+            
+            context.beginPath();
+            context.rect(540, 30, 150, 100);
+            context.stroke();
+            context.fill();
+        }
+        
+        // 绘制圆形
+        function drawArcs() {
+            
+            context.beginPath();
+            context.arc(155, 240, 70, 0, Math.PI * 3 / 2 );
+            context.stroke();
+            
+            context.beginPath();
+            context.arc(385, 240, 70, 0, Math.PI * 3 / 2);
+            context.fill();
+            
+            context.beginPath();
+            context.arc(615, 240, 70, 0, Math.PI * 3 / 2);
+            context.stroke();
+            context.fill();
+        }
+        
+        // 绘制封闭路径
+        function drawClosePathArcs() {
+            
+            context.beginPath();
+            context.arc(155, 420, 70, 0, Math.PI * 3 / 2 );
+            context.closePath();
+            context.stroke();
+            
+            context.beginPath();
+            context.arc(385, 420, 70, 0, Math.PI * 3 / 2);
+            context.closePath();
+            context.fill();
+            
+            context.beginPath();
+            context.arc(615, 420, 70, 0, Math.PI * 3 / 2);
+            context.closePath();
+            context.stroke();
+            context.fill();
+        }
+        
+        // 事件
+        //----------------------------------------------------------
+        
+        // 初始化
+        //----------------------------------------------------------
+        
+        context.strokeStyle = 'blue';
+        context.fillStyle = 'red';
+        context.lineWidth = 2;
+        
+        drawRects();
+        drawArcs();
+        drawClosePathArcs();
+        
+       
+    </script>
+</body>
+
+</html>
