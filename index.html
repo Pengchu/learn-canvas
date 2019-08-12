@@ -4,7 +4,8 @@
 	<meta charset="UTF-8">
 	<title>Canvas - Base</title>
 	
-	<link rel="stylesheet" href="./css/default.css">
+	<link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+	<link href="./css/default.css" rel="stylesheet">
 </head>
 <body>
 	
@@ -14,8 +15,8 @@
 		var canvas = document.getElementById('canvas'),
 	 		context = canvas.getContext('2d');
    		
-   		var CANVAS_WIDTH = 1140,
-   			CANVAS_HEIGHT = 580,
+   		var CANVAS_WIDTH = window.innerWidth,
+   			CANVAS_HEIGHT = window.innerHeight,
    			CANVAS_BACKGROUND_COLOR = 'rgba(255, 255, 255, 1)';
 
    		var GRID_LINE_WIDTH = 0.5,
@@ -32,6 +33,7 @@
 	 	};
 
 	 	Base.prototype.init = function() {
+	 		
 	 		this.canvas.width = CANVAS_WIDTH;
 	 		this.canvas.height = CANVAS_HEIGHT;
 	 		this.canvas.style.backgroundColor = CANVAS_BACKGROUND_COLOR;
@@ -39,6 +41,8 @@
 	 		this.drawGrid();
 	 	};
 
+
+	 	// 网格
 	 	Base.prototype.drawGrid = function() {
 
 	 		var _this = this.context;
@@ -69,6 +73,40 @@
 
 	 	};
 
+	 	// 辅助线
+	 	Base.prototype.drawGuidelines = function(x, y) {
+
+	 		var _this = this.context;
+
+	 		_this.save();
+
+	 		_this.strokeStyle = 'rgba(0,0,230,0.8)';
+   			_this.lineWidth = 0.5;
+
+	 		_this.beginPath();
+   			_this.moveTo(0, y + 0.5);
+   			_this.lineTo(_this.canvas.width, y + 0.5);
+   			_this.stroke();
+
+   			_this.beginPath();
+   			_this.moveTo(x + 0.5, 0);
+   			_this.lineTo(x + 0.5, _this.canvas.height);
+   			_this.stroke();
+
+   			_this.restore();
+
+	 	};
+
+	 	Base.prototype.windowToCanvas = function(x, y) {
+
+	 		var bbox = this.canvas.getBoundingClientRect();
+		   	return { 
+		   		x: x - bbox.left * (this.canvas.width  / bbox.width),
+		        y: y - bbox.top  * (this.canvas.height / bbox.height)
+		    };
+
+	 	};
+
 	 	Base.prototype.testCode = function() {
 	 		
 
@@ -77,6 +115,15 @@
 	 	var base = new Base(canvas, context);
 	 	base.init();
 	 	base.testCode();
+
+	 	canvas.onmousemove = function (e) {
+		   
+		   var loc = base.windowToCanvas(e.clientX, e.clientY);
+
+		   base.drawGrid();
+		   base.drawGuidelines(loc.x, loc.y);
+		
+		};
 
 	</script>
 </body>
