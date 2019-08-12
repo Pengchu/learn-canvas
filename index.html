@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Canvas - Base</title>
+	
+	<link rel="stylesheet" href="./css/default.css">
+</head>
+<body>
+	
+	<canvas id="canvas"></canvas>
+
+	<script>
+		var canvas = document.getElementById('canvas'),
+	 		context = canvas.getContext('2d');
+   		
+   		var CANVAS_WIDTH = 1140,
+   			CANVAS_HEIGHT = 580,
+   			CANVAS_BACKGROUND_COLOR = 'rgba(255, 255, 255, 1)';
+
+   		var GRID_LINE_WIDTH = 0.5,
+   			GRID_LINE_COLOR = 'lightgray',
+   			GRID_SPACING = 10,
+
+   			AXIS_LINE_WIDTH = 1,
+   			AXIS_LINE_COLOR = 'blue';
+
+
+	 	var Base = function(canvas, context) {
+	 		this.canvas = canvas;
+	 		this.context = context;
+	 	};
+
+	 	Base.prototype.init = function() {
+	 		this.canvas.width = CANVAS_WIDTH;
+	 		this.canvas.height = CANVAS_HEIGHT;
+	 		this.canvas.style.backgroundColor = CANVAS_BACKGROUND_COLOR;
+
+	 		this.drawGrid();
+	 	};
+
+	 	Base.prototype.drawGrid = function() {
+
+	 		var _this = this.context;
+
+	 		_this.save();
+
+	 		_this.strokeStyle = GRID_LINE_COLOR;
+	 		_this.lineWidth = GRID_LINE_WIDTH;
+	 		_this.fillStyle = 'rgba(255, 255, 255, 1)';
+
+	 		_this.fillRect(0, 0, _this.canvas.width, _this.canvas.height);
+
+	 		for (var i = GRID_SPACING + GRID_LINE_WIDTH; i < _this.canvas.width; i += GRID_SPACING) {
+	 			_this.beginPath();
+	 			_this.moveTo(i, 0);
+	 			_this.lineTo(i, _this.canvas.height);
+	 			_this.stroke();
+	 		}
+
+	 		for (var i = GRID_SPACING + GRID_LINE_WIDTH; i < _this.canvas.height; i += GRID_SPACING) {
+	 			_this.beginPath();
+	 			_this.moveTo(0, i);
+	 			_this.lineTo(_this.canvas.width, i);
+	 			_this.stroke();
+	 		}
+
+	 		context.restore();
+
+	 	};
+
+	 	Base.prototype.testCode = function() {
+	 		
+
+	 	};
+
+	 	var base = new Base(canvas, context);
+	 	base.init();
+	 	base.testCode();
+
+	</script>
+</body>
+</html>
